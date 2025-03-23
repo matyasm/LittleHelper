@@ -98,51 +98,6 @@ router.get('/users', async (req, res) => {
   }
 });
 
-// Admin route to directly set a password in the database
-// Retained because this is how we fixed the login issue
-router.post('/admin-set-password', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
-    }
-    
-    // Generate hash
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
-    
-    console.log(`Setting password for ${email} with hash: ${hash}`);
-    
-    // Directly update the database, bypassing Mongoose entirely
-    const client = new MongoClient(process.env.MONGO_URI);
-    await client.connect();
-    
-    const database = client.db();
-    const users = database.collection('users');
-    
-    // Update the user password directly in MongoDB
-    const result = await users.updateOne(
-      { email },
-      { $set: { password: hash } }
-    );
-    
-    await client.close();
-    
-    if (result.matchedCount === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    res.json({
-      message: 'Password updated successfully',
-      success: true
-    });
-  } catch (error) {
-    console.error('Admin set password error:', error);
-    res.status(500).json({ message: error.message });
-  }
-});
-
 // DANGEROUS: Delete all users endpoint (Admin only)
 router.delete('/delete-all-users', async (req, res) => {
   try {
