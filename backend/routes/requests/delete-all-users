@@ -1,0 +1,7 @@
+DELETE http://localhost:5001/api/db/delete-all-users HTTP/1.1
+content-type: application/json 
+admin-key: tempAdminKey123
+
+{
+    "confirmationCode":"DELETE_ALL_USERS"
+}

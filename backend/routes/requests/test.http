@@ -1,0 +1,9 @@
+POST http://localhost:5001/api/db/create-test-user HTTP/1.1
+content-type: application/json
+
+{
+    "username": "matyas4",
+    "email": "matyas4@example.com",
+    "password": "password123",
+    "name": "Matyas4"
+}

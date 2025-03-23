@@ -1,0 +1,570 @@
+/* frontend/src/index.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f5f5f5;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* Login styles */
+  .login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .login-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #4a69bd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: #3c5aa6;
+  }
+
+  button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  .error {
+    background: #ffebee;
+    color: #c62828;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+  }
+
+  /* Dashboard styles */
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .dashboard-header button {
+    width: auto;
+    padding: 8px 16px;
+  }
+
+  .dashboard-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .notes-section, .tasks-section {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .notes-section h2, .tasks-section h2 {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .tasks-section li {
+    display: flex;
+    align-items: center;
+  }
+
+  .tasks-section li input {
+    margin-right: 10px;
+  }
+
+  .tasks-section li.completed span {
+    text-decoration: line-through;
+    color: #888;
+  }
+
+  /* Add these styles to your existing CSS */
+
+  .auth-container {
+    max-width: 450px;
+    margin: 100px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .auth-container h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 28px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border 0.3s;
+  }
+
+  .form-group input:focus {
+    border-color: #4a69bd;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 105, 189, 0.2);
+  }
+
+  .btn {
+    width: 100%;
+    padding: 14px;
+    background: #4a69bd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-weight: 600;
+  }
+
+  .btn:hover {
+    background: #3c5aa6;
+  }
+
+  .btn:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+  }
+
+  .error {
+    background: #ffebee;
+    color: #c62828;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  .success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  .form-switch {
+    margin-top: 25px;
+    text-align: center;
+    color: #666;
+  }
+
+  .btn-link {
+    background: none;
+    border: none;
+    color: #4a69bd;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 5px;
+    font-size: 16px;
+  }
+
+  .btn-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Dashboard styles (updated) */
+  .dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .dashboard-header h1 {
+    margin: 0;
+    color: #333;
+  }
+
+  .dashboard-header button {
+    width: auto;
+    padding: 8px 16px;
+  }
+
+  .dashboard-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-content {
+      grid-template-columns: 1fr;
+    }
+    
+    .auth-container {
+      margin: 50px 20px;
+    }
+  }
+
+  /* Add these styles to your existing CSS */
+
+  .password-strength {
+    margin-top: 8px;
+  }
+
+  .strength-bar {
+    height: 6px;
+    background-color: #e2e8f0;
+    border-radius: 3px;
+    margin-bottom: 5px;
+  }
+
+  .strength-indicator {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s, background-color 0.3s;
+  }
+
+  .password-strength p {
+    font-size: 12px;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .password-mismatch {
+    color: #e53e3e;
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: 500;
+  }
+
+  /* Disable the button when passwords don't match or password is weak */
+  .btn:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+  }
+
+  /* User profile in dashboard header */
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .user-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #2d3748;
+  }
+
+  .user-email {
+    font-size: 14px;
+    color: #718096;
+  }
+
+  .logout-btn {
+    background-color: #f56565;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .logout-btn:hover {
+    background-color: #e53e3e;
+  }
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 18px;
+    color: #4a5568;
+  }
+
+  /* Make dashboard more responsive */
+  @media (max-width: 768px) {
+    .dashboard-header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    
+    .user-profile {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .user-info {
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+
+  /* Tab Navigation */
+  .tab-navigation {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .tab-btn {
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    color: #4a5568;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+  }
+
+  .tab-btn:hover {
+    color: #4a69bd;
+  }
+
+  .tab-btn.active {
+    color: #4a69bd;
+    font-weight: 600;
+  }
+
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #4a69bd;
+    border-radius: 3px 3px 0 0;
+  }
+
+  /* Dashboard Content */
+  .dashboard-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f1f1;
+  }
+
+  .section-header h2 {
+    margin: 0;
+    color: #2d3748;
+    font-size: 20px;
+  }
+
+  .add-btn {
+    background-color: #4a69bd;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+
+  .add-btn:hover {
+    background-color: #3c5aa6;
+  }
+
+  /* Notes styles */
+  .notes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+  }
+
+  .note-card {
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .note-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .note-card h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: #2d3748;
+    font-size: 18px;
+  }
+
+  .note-card p {
+    margin: 0;
+    color: #4a5568;
+    line-height: 1.5;
+  }
+
+  /* Tasks styles */
+  .tasks-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .task-item {
+    margin-bottom: 10px;
+    padding: 12px 16px;
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+  }
+
+  .task-item:hover {
+    background-color: #f7fafc;
+  }
+
+  .task-checkbox {
+    display: flex;
+    align-items: center;
+  }
+
+  .task-checkbox input[type="checkbox"] {
+    margin-right: 12px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  .task-checkbox label {
+    cursor: pointer;
+    color: #2d3748;
+    font-size: 16px;
+    transition: text-decoration 0.2s, color 0.2s;
+  }
+
+  .task-checkbox label.completed {
+    text-decoration: line-through;
+    color: #a0aec0;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #a0aec0;
+  }
+
+  .empty-state p {
+    margin: 0;
+    font-size: 16px;
+  }
