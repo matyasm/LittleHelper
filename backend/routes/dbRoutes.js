@@ -58,12 +58,13 @@ router.post('/create-test-user', async (req, res) => {
     const database = client.db();
     const users = database.collection('users');
     
-    // Create new user document
+    // Create new user document with colorProfile
     const result = await users.insertOne({
       username,
       email,
       password: hashedPassword,
       name,
+      colorProfile: 'blue', // Set default color profile
       createdAt: new Date(),
       updatedAt: new Date()
     });

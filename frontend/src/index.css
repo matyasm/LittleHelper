@@ -11,7 +11,9 @@
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #f5f5f5;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   
   .container {
@@ -83,11 +85,24 @@
   }
 
   /* Dashboard styles */
+  .dashboard {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
   .dashboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    padding: 15px 20px;
+    border-bottom: 1px solid;
+  }
+
+  .dashboard-header h1 {
+    margin: 0;
+    font-size: 24px;
   }
 
   .dashboard-header button {
@@ -96,9 +111,9 @@
   }
 
   .dashboard-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .notes-section, .tasks-section {
@@ -243,200 +258,34 @@
     text-decoration: underline;
   }
 
-  /* Dashboard styles (updated) */
-  .dashboard {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-
-  .dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-  }
-
-  .dashboard-header h1 {
-    margin: 0;
-    color: #333;
-  }
-
-  .dashboard-header button {
-    width: auto;
-    padding: 8px 16px;
-  }
-
-  .dashboard-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-  }
-
-  @media (max-width: 768px) {
-    .dashboard-content {
-      grid-template-columns: 1fr;
-    }
-    
-    .auth-container {
-      margin: 50px 20px;
-    }
-  }
-
-  /* Add these styles to your existing CSS */
-
-  .password-strength {
-    margin-top: 8px;
-  }
-
-  .strength-bar {
-    height: 6px;
-    background-color: #e2e8f0;
-    border-radius: 3px;
-    margin-bottom: 5px;
-  }
-
-  .strength-indicator {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.3s, background-color 0.3s;
-  }
-
-  .password-strength p {
-    font-size: 12px;
-    margin: 0;
-    font-weight: 500;
-  }
-
-  .password-mismatch {
-    color: #e53e3e;
-    font-size: 12px;
-    margin-top: 5px;
-    font-weight: 500;
-  }
-
-  /* Disable the button when passwords don't match or password is weak */
-  .btn:disabled {
-    background: #a0aec0;
-    cursor: not-allowed;
-  }
-
-  /* User profile in dashboard header */
-  .dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-  }
-
-  .user-profile {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .user-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
-  }
-
-  .user-name {
-    font-weight: 600;
-    font-size: 16px;
-    color: #2d3748;
-  }
-
-  .user-email {
-    font-size: 14px;
-    color: #718096;
-  }
-
-  .logout-btn {
-    background-color: #f56565;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .logout-btn:hover {
-    background-color: #e53e3e;
-  }
-
-  .loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-size: 18px;
-    color: #4a5568;
-  }
-
-  /* Make dashboard more responsive */
-  @media (max-width: 768px) {
-    .dashboard-header {
-      flex-direction: column;
-      gap: 16px;
-      align-items: flex-start;
-    }
-    
-    .user-profile {
-      width: 100%;
-      justify-content: space-between;
-    }
-    
-    .user-info {
-      align-items: flex-start;
-      text-align: left;
-    }
-  }
-
   /* Tab Navigation */
   .tab-navigation {
-    display: flex;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #e2e8f0;
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
   }
 
-  .tab-btn {
-    padding: 12px 20px;
+  .tab-buttons {
+    display: flex;
+    width: 100%;
+    max-width: 600px; /* Adjust as needed */
+    margin: 0 auto;
+  }
+
+  .tab-buttons button {
+    flex: 1;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 16px;
     background: none;
     border: none;
-    color: #4a5568;
-    font-size: 16px;
-    font-weight: 500;
+    border-bottom: 3px solid transparent;
     cursor: pointer;
-    position: relative;
-    transition: color 0.2s;
+    transition: all 0.3s ease;
   }
 
-  .tab-btn:hover {
-    color: #4a69bd;
-  }
-
-  .tab-btn.active {
-    color: #4a69bd;
-    font-weight: 600;
-  }
-
-  .tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #4a69bd;
-    border-radius: 3px 3px 0 0;
+  .tab-buttons button.active {
+    font-weight: bold;
   }
 
   /* Dashboard Content */
@@ -567,4 +416,947 @@
   .empty-state p {
     margin: 0;
     font-size: 16px;
+  }
+
+  /* Add CSS variables to :root */
+  :root {
+    --color-primary: #4a69bd;
+    --color-secondary: #3c5aa6;
+    --color-accent: #2c3e50;
+    --color-background: #f5f7fa;
+    --color-card-bg: #ffffff;
+    --color-text: #2d3748;
+    --color-text-light: #718096;
+    --color-border: #e2e8f0;
+    --color-success: #38a169;
+    --color-error: #e53e3e;
+  }
+
+  /* Update existing styles to use variables */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Add styles for the color profile selector */
+  .dashboard-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .color-profile-selector {
+    position: relative;
+  }
+
+  .profile-selector-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--color-text);
+    color: #000000 !important; /* Force black text with !important to override any theme settings */
+  }
+
+  .color-preview {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+  }
+
+  .arrow {
+    font-size: 10px;
+    margin-left: 4px;
+  }
+
+  .profile-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    margin-top: 5px;
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    overflow: hidden;
+    background-color: white; /* Ensure background is white */
+  }
+
+  .profile-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: #000000 !important; /* Force black text for all options */
+  }
+
+  .profile-option:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .profile-option.active {
+    background-color: rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+  }
+
+  /* Update other component styles to use variables */
+  .btn {
+    background-color: var(--color-primary);
+  }
+
+  .btn:hover {
+    background-color: var(--color-secondary);
+  }
+
+  .tab-btn.active {
+    color: var(--color-primary);
+  }
+
+  .tab-btn.active::after {
+    background-color: var(--color-primary);
+  }
+
+  .add-btn {
+    background-color: var(--color-primary);
+  }
+
+  .add-btn:hover {
+    background-color: var(--color-secondary);
+  }
+
+  /* ... continue updating other styles as needed */
+
+  /* Add some more transition properties */
+  .dashboard, 
+  .dashboard-content, 
+  .tab-navigation, 
+  .tab-btn,
+  .note-card,
+  .task-item {
+    transition: 
+      background-color 0.3s ease, 
+      color 0.3s ease, 
+      border-color 0.3s ease, 
+      box-shadow 0.3s ease;
+  }
+
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .modal-content {
+    position: relative;
+    max-width: 95%;
+    max-height: 95%;
+    overflow: auto;
+    animation: scaleIn 0.2s ease;
+  }
+
+  .note-modal {
+    width: 700px; /* Larger size */
+    max-width: calc(100vw - 40px);
+  }
+
+  .note-form-container {
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+  }
+
+  .form-header h2 {
+    margin: 0;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+
+  .close-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .note-form {
+    padding: 20px 25px 25px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 6px;
+    border: 1px solid;
+    font-size: 15px;
+    transition: all 0.2s ease;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 150px;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+  }
+
+  .cancel-btn,
+  .submit-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid;
+  }
+
+  .submit-btn {
+    min-width: 120px;
+  }
+
+  .cancel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .message {
+    padding: 15px 25px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+  }
+
+  .message::before {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+
+  .error-message::before {
+    content: "✕";
+  }
+
+  .success-message::before {
+    content: "✓";
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  /* User actions */
+  .user-actions {
+    margin-top: 4px;
+  }
+
+  .settings-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  /* Add these styles for note management */
+
+  /* Notes Container */
+  .notes-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Notes Toolbar - improved layout */
+  .notes-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-right: 20px;
+  }
+
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Increased gap between view selector and button */
+    flex-wrap: nowrap; /* Prevent wrapping */
+  }
+
+  /* Search Box */
+  .search-container {
+    position: relative;
+    width: 300px;
+    max-width: 100%;
+  }
+
+  .search-container input {
+    width: 100%;
+    padding: 10px 12px;
+    padding-left: 36px;
+    border-radius: 6px;
+    border: 1px solid;
+    font-size: 14px;
+  }
+
+  .search-container::before {
+    content: "🔍";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+  }
+
+  /* View Mode Selector - improved */
+  .view-mode-selector {
+    display: flex;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    flex-shrink: 0; /* Prevent shrinking */
+    white-space: nowrap; /* Keep text on single line */
+  }
+
+  .view-btn {
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .view-btn.active {
+    font-weight: 600;
+  }
+
+  /* Add Note Button - compact icon-only version */
+  .add-note-btn.icon-only {
+    width: 36px;  /* Set to match the icon size plus padding */
+    height: 36px; /* Keep it square */
+    min-width: 36px; /* Prevent resizing */
+    border-radius: 50%; /* Make it circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0; /* Prevent the button from shrinking */
+  }
+
+  .add-note-btn.icon-only:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .add-note-btn.icon-only .plus-icon {
+    font-size: 24px; /* Increase font size for better visibility */
+    font-weight: bold;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; /* Match the font size */
+    height: 24px; /* Match the font size */
+  }
+
+  /* Responsive adjustments for toolbar */
+  @media (max-width: 768px) {
+    .notes-toolbar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 15px;
+    }
+    
+    .toolbar-left,
+    .toolbar-right {
+      width: 100%;
+      margin-right: 0;
+      justify-content: space-between;
+    }
+    
+    .toolbar-right {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .view-mode-selector {
+      flex-grow: 1;
+      justify-content: center;
+    }
+    
+    .view-btn {
+      flex: 1;
+      text-align: center;
+      padding: 8px 10px;
+    }
+    
+    .add-note-btn {
+      flex-grow: 0;
+      width: auto;
+    }
+    
+    .search-container {
+      width: 100%;
+    }
+  }
+
+  /* Notes Grid */
+  .notes-grid {
+    display: grid;
+    gap: 20px;
+    padding: 20px 0;
+    width: 100%;
+  }
+
+  /* Note Grid Layouts - updated for better compact view */
+  .notes-grid.card {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .notes-grid.compact {
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px; /* Reduced gap for compact view */
+  }
+
+  .notes-grid.list {
+    grid-template-columns: 1fr;
+    gap: 8px; /* Even smaller gap for list view */
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 1600px) {
+    .notes-grid.card {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .notes-grid.compact {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .notes-grid.card {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .notes-grid.compact {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .notes-grid.card {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .notes-grid.compact {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .notes-grid.card {
+      grid-template-columns: 1fr;
+    }
+    
+    .notes-grid.compact {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Note Styles */
+  .note {
+    position: relative; /* Needed for absolute positioning of action buttons */
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .note:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  /* Note Header with action buttons */
+  .note-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--color-border);
+    position: relative; /* For positioning elements within */
+  }
+
+  .note-header h3 {
+    margin: 0;
+    padding-right: 70px; /* Make room for the action buttons */
+    word-break: break-word;
+    line-height: 1.3;
+  }
+
+  /* Action buttons container */
+  .note-actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 5px;
+    opacity: 0; /* Hide by default */
+    transition: opacity 0.2s ease;
+  }
+
+  /* Show actions on hover */
+  .note:hover .note-actions {
+    opacity: 1;
+  }
+
+  /* Icon buttons */
+  .icon-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+
+  .icon-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .icon-btn:active {
+    transform: scale(0.95);
+  }
+
+  .note-list .icon-btn {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Edit icon */
+  .edit-icon {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  /* Delete icon */
+  .delete-icon {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 0.9;
+  }
+
+  /* Special styles for different view modes */
+  .note-card .note-actions,
+  .note-compact .note-actions {
+    top: 10px;
+    right: 10px;
+  }
+
+  .note-list .note-actions {
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    opacity: 0;
+  }
+
+  .note-list:hover .note-actions {
+    opacity: 1;
+  }
+
+  /* For compact view, adjust the icon size */
+  .note-compact .icon-btn {
+    width: 24px;
+    height: 24px;
+  }
+
+  .note-compact .edit-icon {
+    font-size: 14px;
+  }
+
+  .note-compact .delete-icon {
+    font-size: 18px;
+  }
+
+  /* Ensure root elements use full width */
+  html, body, #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  /* App container */
+  .app {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Make sure padding doesn't cause horizontal scrolling */
+  * {
+    box-sizing: border-box;
+  }
+
+  /* User profile section */
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  /* Color profile selector */
+  .color-profile-selector select {
+    border-radius: 4px;
+    border: 1px solid;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+    padding-right: 30px;
+  }
+
+  /* User info */
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user-name {
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .user-email {
+    font-size: 13px;
+  }
+
+  /* Change password link and logout button */
+  .change-password-link {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .logout-btn {
+    border: none;
+    border-radius: 4px;
+    padding: 7px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .dashboard-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .user-profile {
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    
+    .color-profile-selector {
+      order: -1;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    
+    .color-profile-selector select {
+      width: 100%;
+    }
+  }
+
+  /* General note styles */
+  .note-content {
+    padding: 16px;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  .note-content p {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Card view - normal font size */
+  .note-card .note-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .note-card .note-content p {
+    font-size: 15px;
+  }
+
+  /* Compact view - smaller and lighter fonts */
+  .note-compact .note-header {
+    padding: 10px 12px;
+  }
+
+  .note-compact .note-header h3 {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .note-compact .note-content {
+    padding: 10px 12px;
+  }
+
+  .note-compact .note-content p {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.3;
+    color: inherit;
+    opacity: 0.85; /* lighter text */
+  }
+
+  .note-compact .note-footer {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+
+  /* List View - Updated for single line layout */
+  .note-list {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    height: 48px; /* Fixed height for single line */
+    overflow: hidden;
+  }
+
+  .note-list .note-header {
+    width: 25%;
+    min-width: 150px;
+    max-width: 300px;
+    padding: 0;
+    border: none;
+    margin-right: 15px;
+    overflow: hidden;
+  }
+
+  .note-list .note-header h3 {
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    padding-right: 0; /* Reset padding since actions are elsewhere */
+    line-height: 1.2;
+  }
+
+  .note-list .note-content {
+    flex: 1;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .note-list .note-content p {
+    font-size: 13px;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    line-height: 1.2;
+    opacity: 0.85;
+  }
+
+  .note-list .note-date {
+    width: 85px;
+    text-align: right;
+    font-size: 12px;
+    opacity: 0.7;
+    margin-left: 15px;
+    flex-shrink: 0;
+  }
+
+  /* Action buttons for list view */
+  .note-list .note-actions {
+    position: relative;
+    top: auto;
+    right: auto;
+    opacity: 0;
+    margin-left: 15px;
+    flex-shrink: 0;
+    transform: none;
+  }
+
+  .note-list:hover .note-actions {
+    opacity: 1;
+  }
+
+  /* Fix gap between icons */
+  .note-list .note-actions {
+    gap: 5px;
+  }
+
+  .note-list .icon-btn {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Make sure list view takes full width of container */
+  .notes-grid.list {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+
+  /* Responsive adjustments for list view */
+  @media (max-width: 768px) {
+    .note-list .note-header {
+      width: 40%;
+      min-width: 100px;
+    }
+    
+    .note-list .note-date {
+      display: none; /* Hide date on smaller screens */
+    }
+  }
+
+  @media (max-width: 480px) {
+    .note-list {
+      height: auto;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 10px;
+    }
+    
+    .note-list .note-header {
+      width: 100%;
+      margin-bottom: 5px;
+      margin-right: 0;
+    }
+    
+    .note-list .note-content {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    
+    .note-list .note-actions {
+      margin-left: auto;
+      margin-right: 0;
+    }
   }

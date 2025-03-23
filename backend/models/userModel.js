@@ -22,6 +22,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add a password'],
     },
+    colorProfile: {
+      type: String,
+      enum: ['blue', 'purple', 'green', 'orange', 'red', 'teal', 'dark', 'light'],
+      default: 'blue'
+    }
   },
   {
     timestamps: true,

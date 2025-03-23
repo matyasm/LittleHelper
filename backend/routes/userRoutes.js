@@ -90,6 +90,7 @@ router.post('/login', async (req, res) => {
       name: user.name,
       email: user.email,
       username: user.username,
+      colorProfile: user.colorProfile || 'blue', // Default to blue if not set
       token
     });
   } catch (error) {
@@ -97,7 +98,20 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error during login', error: error.message });
   }
 });
-router.get('/me', protect, getMe);
+router.get('/me', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 router.post('/register', async (req, res) => {
   try {
@@ -222,6 +236,84 @@ router.post('/debug-login', async (req, res) => {
         stack: error.stack
       }
     });
+  }
+});
+
+// Update user color profile
+router.patch('/update-color-profile', protect, async (req, res) => {
+  try {
+    const { colorProfile } = req.body;
+    
+    // Validate color profile
+    const validProfiles = ['blue', 'purple', 'green', 'orange', 'red', 'teal', 'dark', 'light'];
+    if (!validProfiles.includes(colorProfile)) {
+      return res.status(400).json({ message: 'Invalid color profile' });
+    }
+    
+    // Update user
+    const user = await User.findById(req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    user.colorProfile = colorProfile;
+    await user.save();
+    
+    res.json({
+      message: 'Color profile updated successfully',
+      colorProfile: user.colorProfile
+    });
+  } catch (error) {
+    console.error('Error updating color profile:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Change password endpoint
+router.patch('/change-password', protect, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    
+    // Validate input
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ 
+        message: 'Current password and new password are required' 
+      });
+    }
+    
+    // Get user from database with password
+    const user = await User.findById(req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    // Verify current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Current password is incorrect' });
+    }
+    
+    // Check if new password meets requirements
+    if (newPassword.length < 8) {
+      return res.status(400).json({ 
+        message: 'New password must be at least 8 characters long' 
+      });
+    }
+    
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    
+    // Save user with new password
+    await user.save();
+    
+    res.json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

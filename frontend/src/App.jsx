@@ -6,14 +6,14 @@ import Dashboard from './components/Dashboard';
 
 function App() {
   return (
-    <Router>
-      <div className="container">
+    <div className="app" style={{ width: '100%', maxWidth: '100%' }}>
+      <Router>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 
