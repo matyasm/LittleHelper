@@ -8,7 +8,6 @@ const NoteForm = ({ theme, note, onNoteAdded, onNoteUpdated, onClose }) => {
     content: note ? note.content : ''
   });
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   
   const { title, content } = formData;
@@ -24,7 +23,6 @@ const NoteForm = ({ theme, note, onNoteAdded, onNoteUpdated, onClose }) => {
       content: note ? note.content : ''
     });
     setError('');
-    setSuccess('');
   }, [note]);
   
   const onChange = (e) => {
@@ -59,8 +57,6 @@ const NoteForm = ({ theme, note, onNoteAdded, onNoteUpdated, onClose }) => {
         console.log('Note update response:', response);
         
         if (response.data && response.status >= 200 && response.status < 300) {
-          setSuccess('Note updated successfully!');
-          
           // Call the callback with the updated note
           if (onNoteUpdated) {
             try {
@@ -70,10 +66,8 @@ const NoteForm = ({ theme, note, onNoteAdded, onNoteUpdated, onClose }) => {
             }
           }
           
-          // Close the form after a short delay
-          setTimeout(() => {
-            if (onClose) onClose();
-          }, 800);
+          // Close the form immediately
+          if (onClose) onClose();
         }
       } else {
         // Create new note
@@ -87,8 +81,6 @@ const NoteForm = ({ theme, note, onNoteAdded, onNoteUpdated, onClose }) => {
         console.log('Note creation response:', response);
         
         if (response.data && response.status >= 200 && response.status < 300) {
-          setSuccess('Note created successfully!');
-          
           // Call the callback with the new note
           if (onNoteAdded) {
             try {
@@ -98,16 +90,8 @@ const NoteForm = ({ theme, note, onNoteAdded, onNoteUpdated, onClose }) => {
             }
           }
           
-          // Clear form if not closing
-          setFormData({
-            title: '',
-            content: ''
-          });
-          
-          // Close the form after a short delay
-          setTimeout(() => {
-            if (onClose) onClose();
-          }, 800);
+          // Close the form immediately
+          if (onClose) onClose();
         }
       }
     } catch (error) {
@@ -161,16 +145,6 @@ const NoteForm = ({ theme, note, onNoteAdded, onNoteUpdated, onClose }) => {
           borderLeft: `4px solid ${theme.error}`
         }}>
           {error}
-        </div>
-      )}
-      
-      {success && (
-        <div className="message success-message" style={{ 
-          backgroundColor: `${theme.success}15`, 
-          color: theme.success,
-          borderLeft: `4px solid ${theme.success}`
-        }}>
-          {success}
         </div>
       )}
       
