@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ColorProfileSelector from './ColorProfileSelector';
@@ -31,6 +31,8 @@ const Dashboard = () => {
     success: '#388e3c'
   });
   const [editingNote, setEditingNote] = useState(null);
+  const [importStatus, setImportStatus] = useState(null);
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -313,6 +315,164 @@ const Dashboard = () => {
     setFilteredNotes(filtered);
   }, [notes]);
   
+  // Function to handle data export
+  const handleExport = () => {
+    try {
+      // Prepare the data to export
+      const exportData = {
+        notes,
+        tasks,
+        exportDate: new Date().toISOString(),
+        userId: user.id || user._id,
+        username: user.username,
+        email: user.email
+      };
+      
+      // Convert data to JSON string
+      const jsonString = JSON.stringify(exportData, null, 2);
+      
+      // Create a blob from the JSON string
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      
+      // Create a URL for the blob
+      const url = URL.createObjectURL(blob);
+      
+      // Create a temporary link element
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `little-helper-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      
+      // Trigger the download
+      document.body.appendChild(a);
+      a.click();
+      
+      // Clean up
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      console.log('Data exported successfully');
+    } catch (error) {
+      console.error('Error exporting data:', error);
+    }
+  };
+  
+  // Function to trigger file input click
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+  
+  // Function to handle data import
+  const handleImport = async (event) => {
+    try {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      setImportStatus({ status: 'loading', message: 'Importing data...' });
+      
+      // Read the file
+      const reader = new FileReader();
+      
+      reader.onload = async (e) => {
+        try {
+          // Parse the JSON data
+          const importedData = JSON.parse(e.target.result);
+          
+          if (!importedData.notes || !Array.isArray(importedData.notes)) {
+            setImportStatus({ status: 'error', message: 'Invalid import file: No notes found' });
+            return;
+          }
+          
+          const importedNotes = importedData.notes;
+          const importedTasks = importedData.tasks || [];
+          
+          // Filter out notes that already exist in the database
+          // We'll consider a note as existing if it has the same title and content
+          const existingTitlesAndContents = notes.map(note => `${note.title}-${note.content}`);
+          const newNotes = importedNotes.filter(note => 
+            !existingTitlesAndContents.includes(`${note.title}-${note.content}`)
+          );
+          
+          // Get existing task titles for comparison
+          const existingTaskTitles = tasks.map(task => task.title);
+          const newTasks = importedTasks.filter(task => 
+            !existingTaskTitles.includes(task.title)
+          );
+          
+          // Import new notes
+          let importedCount = 0;
+          
+          for (const note of newNotes) {
+            try {
+              const response = await axios.post('/api/notes', {
+                title: note.title,
+                content: note.content
+              });
+              
+              if (response.data) {
+                // Add the new note to state
+                handleAddNote(response.data);
+                importedCount++;
+              }
+            } catch (error) {
+              console.error('Error importing note:', error);
+            }
+          }
+          
+          // Import new tasks
+          let importedTaskCount = 0;
+          
+          for (const task of newTasks) {
+            try {
+              const response = await axios.post('/api/tasks', {
+                title: task.title,
+                completed: task.completed || false
+              });
+              
+              if (response.data) {
+                // Update tasks state (you should implement a handleAddTask function similar to handleAddNote)
+                setTasks(prevTasks => [response.data, ...prevTasks]);
+                importedTaskCount++;
+              }
+            } catch (error) {
+              console.error('Error importing task:', error);
+            }
+          }
+          
+          // Reset the file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
+          
+          setImportStatus({ 
+            status: 'success', 
+            message: `Successfully imported ${importedCount} new notes and ${importedTaskCount} new tasks.`
+          });
+          
+          // Clear the status after 5 seconds
+          setTimeout(() => {
+            setImportStatus(null);
+          }, 5000);
+          
+        } catch (error) {
+          console.error('Error parsing imported data:', error);
+          setImportStatus({ status: 'error', message: 'Error parsing imported data' });
+        }
+      };
+      
+      reader.onerror = () => {
+        setImportStatus({ status: 'error', message: 'Error reading file' });
+      };
+      
+      reader.readAsText(file);
+      
+    } catch (error) {
+      console.error('Error importing data:', error);
+      setImportStatus({ status: 'error', message: 'Error importing data' });
+    }
+  };
+  
   if (loading) {
     return <div className="loading-container">Loading...</div>;
   }
@@ -492,6 +652,48 @@ const Dashboard = () => {
                     }}
                   />
                 </div>
+                
+                {/* Export/Import Buttons */}
+                <div className="data-management" style={{ marginLeft: '15px', display: 'flex' }}>
+                  <button
+                    onClick={handleExport}
+                    title="Export notes and tasks"
+                    style={{
+                      backgroundColor: theme.cardBg,
+                      color: theme.primary,
+                      border: `1px solid ${theme.border}`,
+                      padding: '6px 12px',
+                      marginRight: '10px',
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Export
+                  </button>
+                  
+                  <button
+                    onClick={triggerFileInput}
+                    title="Import notes and tasks"
+                    style={{
+                      backgroundColor: theme.cardBg,
+                      color: theme.primary,
+                      border: `1px solid ${theme.border}`,
+                      padding: '6px 12px',
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Import
+                  </button>
+                  
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImport}
+                    accept=".json"
+                    style={{ display: 'none' }}
+                  />
+                </div>
               </div>
               
               <div className="toolbar-right">
@@ -529,6 +731,37 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
+            
+            {/* Import Status Message */}
+            {importStatus && (
+              <div 
+                className={`import-status-message ${importStatus.status}`}
+                style={{
+                  padding: '10px 15px',
+                  margin: '10px 0',
+                  borderRadius: '4px',
+                  backgroundColor: importStatus.status === 'error' 
+                    ? `${theme.error}15` 
+                    : importStatus.status === 'success'
+                    ? `${theme.success}15`
+                    : `${theme.primary}15`,
+                  color: importStatus.status === 'error'
+                    ? theme.error
+                    : importStatus.status === 'success'
+                    ? theme.success
+                    : theme.primary,
+                  borderLeft: `4px solid ${
+                    importStatus.status === 'error'
+                      ? theme.error
+                      : importStatus.status === 'success'
+                      ? theme.success
+                      : theme.primary
+                  }`
+                }}
+              >
+                {importStatus.message}
+              </div>
+            )}
             
             {/* Notes grid - full width */}
             <div 

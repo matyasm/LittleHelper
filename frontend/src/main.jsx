@@ -7,7 +7,7 @@ import './index.css';
 import axios from 'axios';
 
 // Configure axios base URL
-axios.defaults.baseURL = 'http://localhost:5002'; // Adjust to your backend URL
+axios.defaults.baseURL = 'http://localhost:5001'; // Adjust to your backend URL
 console.log('Axios baseURL configured:', axios.defaults.baseURL);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

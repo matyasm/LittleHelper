@@ -37,6 +37,7 @@ app.use(cors({
     
     const allowedOrigins = [
       'http://localhost:3000',
+      'http://localhost:3001', // For Vite when 3000 is taken
       'http://localhost:5000',
       'http://localhost:5173', // Vite default port
       'http://127.0.0.1:5173',
