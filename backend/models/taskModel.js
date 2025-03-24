@@ -114,7 +114,7 @@ class Task {
     
     // Add each field to update
     for (const [key, value] of Object.entries(updateData)) {
-      if (key !== 'id' && key !== '_id' && key !== 'createdAt' && key !== 'userId') {
+      if (key !== 'id' && key !== 'createdAt' && key !== 'userId') {
         if (key === 'completed') {
           setClauses.push(`${key} = ?`);
           values.push(value ? 1 : 0);

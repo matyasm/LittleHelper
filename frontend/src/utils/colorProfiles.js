@@ -1,101 +1,101 @@
-// Color profiles for the application
+// Color profiles for the application - Exotic subtle themes
 const colorProfiles = {
-  blue: {
-    name: 'Blue',
-    primary: '#4a69bd',
-    secondary: '#3c5aa6',
-    accent: '#2c3e50',
-    background: '#f5f7fa',
+  auroraBreeze: {
+    name: 'Aurora Breeze',
+    primary: '#4facfe',
+    secondary: '#00f2fe',
+    accent: '#4158d0',
+    background: '#f8faff',
     cardBg: '#ffffff',
     text: '#2d3748',
     textLight: '#718096',
     border: '#e2e8f0',
-    success: '#38a169',
+    success: '#0bab64',
     error: '#e53e3e',
   },
-  purple: {
-    name: 'Purple',
-    primary: '#8e44ad',
-    secondary: '#7d3c98',
-    accent: '#6c3483',
-    background: '#f8f5fd',
+  amethystDusk: {
+    name: 'Amethyst Dusk',
+    primary: '#8a2be2',
+    secondary: '#a15ee6',
+    accent: '#7a43b6',
+    background: '#f9f5ff',
     cardBg: '#ffffff',
     text: '#2d3748',
     textLight: '#718096',
-    border: '#e6ddf5',
+    border: '#e8dffa',
     success: '#38a169',
     error: '#e53e3e',
   },
-  green: {
-    name: 'Green',
-    primary: '#2ecc71',
-    secondary: '#27ae60',
-    accent: '#1e8449',
-    background: '#f0faf5',
+  saharaSunset: {
+    name: 'Sahara Sunset',
+    primary: '#f2994a',
+    secondary: '#f18345',
+    accent: '#dd7230',
+    background: '#fffaf7',
     cardBg: '#ffffff',
     text: '#2d3748',
     textLight: '#718096',
-    border: '#d1f2e0',
+    border: '#f7e8df',
     success: '#38a169',
     error: '#e53e3e',
   },
-  orange: {
-    name: 'Orange',
-    primary: '#e67e22',
-    secondary: '#d35400',
-    accent: '#ba4a00',
-    background: '#fff9f2',
+  jadeForest: {
+    name: 'Jade Forest',
+    primary: '#36b37e',
+    secondary: '#25a069',
+    accent: '#086e45',
+    background: '#f5fff9',
     cardBg: '#ffffff',
     text: '#2d3748',
     textLight: '#718096',
-    border: '#fce3cf',
-    success: '#38a169',
+    border: '#dff7ec',
+    success: '#0bab64',
     error: '#e53e3e',
   },
-  red: {
-    name: 'Red',
-    primary: '#e74c3c',
-    secondary: '#c0392b',
-    accent: '#a93226',
-    background: '#fff5f5',
+  coralReef: {
+    name: 'Coral Reef',
+    primary: '#ff7e67',
+    secondary: '#f25f4c',
+    accent: '#e14b32',
+    background: '#fff8f6',
     cardBg: '#ffffff',
     text: '#2d3748',
     textLight: '#718096',
-    border: '#fddede',
+    border: '#fce6e1',
     success: '#38a169',
     error: '#e53e3e',
   },
-  teal: {
-    name: 'Teal',
-    primary: '#1abc9c',
-    secondary: '#16a085',
-    accent: '#117a65',
-    background: '#effcfa',
+  oceanMist: {
+    name: 'Ocean Mist',
+    primary: '#00b8d9',
+    secondary: '#00a3bf',
+    accent: '#0282a5',
+    background: '#f5fcff',
     cardBg: '#ffffff',
     text: '#2d3748',
     textLight: '#718096',
-    border: '#d1f5ed',
+    border: '#d8f1f9',
     success: '#38a169',
     error: '#e53e3e',
   },
-  dark: {
-    name: 'Dark',
-    primary: '#34495e',
-    secondary: '#2c3e50',
-    accent: '#1a2530',
-    background: '#1e2330',
-    cardBg: '#2d3748',
+  midnightOrchid: {
+    name: 'Midnight Orchid',
+    primary: '#6c63ff',
+    secondary: '#574bd6',
+    accent: '#4335b5',
+    background: '#171923',
+    cardBg: '#232535',
     text: '#f7fafc',
     textLight: '#cbd5e0',
-    border: '#4a5568',
+    border: '#303346',
     success: '#68d391',
     error: '#fc8181',
   },
-  light: {
-    name: 'Light',
-    primary: '#6c5ce7',
-    secondary: '#5b4dcb',
-    accent: '#4b3fb1',
+  alpineSnow: {
+    name: 'Alpine Snow',
+    primary: '#4776e6',
+    secondary: '#3a66d4',
+    accent: '#2855c5',
     background: '#ffffff',
     cardBg: '#f8fafc',
     text: '#1a202c',
@@ -106,4 +106,39 @@ const colorProfiles = {
   }
 };
 
-export default colorProfiles; 
+// Function to get dark mode variant of a theme
+const getDarkModeTheme = (theme) => {
+  return {
+    ...theme,
+    background: '#171923',
+    cardBg: '#232535',
+    text: '#f7fafc',
+    textLight: '#cbd5e0',
+    border: '#303346',
+  };
+};
+
+// Generate theme object based on profile and mode
+const getTheme = (profileKey, mode = 'light') => {
+  const baseTheme = colorProfiles[profileKey] || colorProfiles.auroraBreeze;
+  
+  if (mode === 'dark' && profileKey !== 'midnightOrchid') {
+    return {
+      ...getDarkModeTheme(baseTheme),
+      primary: baseTheme.primary,
+      secondary: baseTheme.secondary,
+      accent: baseTheme.accent,
+      success: '#68d391',
+      error: '#fc8181',
+      mode: 'dark'
+    };
+  }
+  
+  return {
+    ...baseTheme,
+    mode: mode
+  };
+};
+
+// Export both the raw profiles and the theme generator
+export { colorProfiles, getTheme }; 

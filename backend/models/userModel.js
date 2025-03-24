@@ -28,9 +28,8 @@ class User {
       return db.get('SELECT * FROM users WHERE email = ?', [filter.email]);
     } else if (filter.username) {
       return db.get('SELECT * FROM users WHERE username = ?', [filter.username]);
-    } else if (filter._id || filter.id) {
-      const userId = filter._id || filter.id;
-      return db.get('SELECT * FROM users WHERE id = ?', [userId]);
+    } else if (filter.id) {
+      return db.get('SELECT * FROM users WHERE id = ?', [filter.id]);
     }
     
     return null;
@@ -85,7 +84,7 @@ class User {
     
     // Add each field to update
     for (const [key, value] of Object.entries(updateData)) {
-      if (key !== 'id' && key !== '_id' && key !== 'createdAt') {
+      if (key !== 'id' && key !== 'createdAt') {
         setClauses.push(`${key} = ?`);
         values.push(value);
       }

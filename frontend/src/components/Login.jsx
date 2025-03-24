@@ -133,10 +133,16 @@ const Login = () => {
         }));
       }
     } catch (error) {
-      setError(
-        error.response?.data?.message || 
-        (isLogin ? 'Login failed' : 'Registration failed')
-      );
+      console.error('Error during authentication:', error);
+      
+      if (error.code === 'ERR_NETWORK') {
+        setError(`Cannot connect to the backend server on port 5001. Please make sure the server is running.`);
+      } else {
+        setError(
+          error.response?.data?.message || 
+          (isLogin ? 'Login failed' : 'Registration failed')
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -158,8 +164,45 @@ const Login = () => {
     <div className="auth-container">
       <h1>{isLogin ? 'Login' : 'Register'}</h1>
       
-      {error && <div className="error">{error}</div>}
-      {success && <div className="success">{success}</div>}
+      {error && (
+        <div className="error" style={{
+          backgroundColor: '#fee2e2',
+          color: '#b91c1c',
+          padding: '10px 15px',
+          borderRadius: '5px',
+          marginBottom: '20px',
+          border: '1px solid #f87171',
+          fontSize: '14px'
+        }}>
+          {error}
+          {error.includes('port 5001') && (
+            <div style={{ marginTop: '10px', fontSize: '13px' }}>
+              <strong>Tip:</strong> Make sure the backend server is running with the command:
+              <pre style={{ 
+                backgroundColor: '#fff', 
+                padding: '6px', 
+                marginTop: '5px',
+                borderRadius: '3px',
+                overflow: 'auto'
+              }}>cd backend && npm run dev</pre>
+            </div>
+          )}
+        </div>
+      )}
+      
+      {success && (
+        <div className="success" style={{
+          backgroundColor: '#dcfce7',
+          color: '#166534',
+          padding: '10px 15px',
+          borderRadius: '5px',
+          marginBottom: '20px',
+          border: '1px solid #86efac',
+          fontSize: '14px'
+        }}>
+          {success}
+        </div>
+      )}
       
       <form onSubmit={onSubmit}>
         <div className="form-group">

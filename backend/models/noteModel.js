@@ -111,7 +111,7 @@ class Note {
     
     // Add each field to update
     for (const [key, value] of Object.entries(updateData)) {
-      if (key !== 'id' && key !== '_id' && key !== 'createdAt' && key !== 'userId') {
+      if (key !== 'id' && key !== 'createdAt' && key !== 'userId') {
         setClauses.push(`${key} = ?`);
         values.push(value);
       }

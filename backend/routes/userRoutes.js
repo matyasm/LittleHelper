@@ -79,15 +79,14 @@ router.post('/login', async (req, res) => {
     // Generate JWT token
     console.log('Password matched, generating token');
     const token = jwt.sign(
-      { id: user.id }, // Using user.id instead of user._id for SQLite
+      { id: user.id }, // Using user.id for SQLite
       process.env.JWT_SECRET || 'fallbacksecret', // Fallback for testing
       { expiresIn: '30d' }
     );
     
     console.log('Login successful for user:', user.email);
     res.json({
-      _id: user.id, // Return user.id as _id for compatibility
-      id: user.id,  // Also include the id field
+      id: user.id, // Using SQLite's id field
       name: user.name,
       email: user.email,
       username: user.username,
@@ -220,10 +219,10 @@ router.patch('/change-password', protect, async (req, res) => {
     
     // Hash new password
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
     
-    // Save user with new password
-    await user.save();
+    // Update user with new password using the SQLite model method
+    await User.findByIdAndUpdate(req.user.id, { password: hashedPassword });
     
     res.json({ message: 'Password updated successfully' });
   } catch (error) {
