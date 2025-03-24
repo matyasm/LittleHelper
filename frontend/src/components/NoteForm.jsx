@@ -14,6 +14,9 @@ const NoteForm = ({ theme, note, onNoteAdded, onNoteUpdated, onClose }) => {
   const { title, content } = formData;
   const isEditing = !!note; // Check if note is provided (editing mode)
   
+  // Get the note ID (support both MongoDB _id and SQLite id)
+  const getNoteId = () => note?._id || note?.id;
+  
   // Reset form when note changes (switching between add/edit)
   useEffect(() => {
     setFormData({
@@ -45,9 +48,10 @@ const NoteForm = ({ theme, note, onNoteAdded, onNoteUpdated, onClose }) => {
       
       if (isEditing) {
         // Update existing note
-        console.log('Updating note:', { id: note._id, ...formData });
+        const noteId = getNoteId();
+        console.log('Updating note:', { id: noteId, ...formData });
         
-        const response = await axios.put(`/api/notes/${note._id}`, {
+        const response = await axios.put(`/api/notes/${noteId}`, {
           title: title.trim(),
           content: content.trim()
         });

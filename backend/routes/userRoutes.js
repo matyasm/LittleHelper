@@ -64,7 +64,7 @@ router.post('/login', async (req, res) => {
         console.log('- Converting plain text password to hash');
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
-        await user.save();
+        await User.findByIdAndUpdate(user.id, { password: user.password });
         console.log('- Password converted to hash');
       }
     }
@@ -79,14 +79,15 @@ router.post('/login', async (req, res) => {
     // Generate JWT token
     console.log('Password matched, generating token');
     const token = jwt.sign(
-      { id: user._id },
+      { id: user.id }, // Using user.id instead of user._id for SQLite
       process.env.JWT_SECRET || 'fallbacksecret', // Fallback for testing
       { expiresIn: '30d' }
     );
     
     console.log('Login successful for user:', user.email);
     res.json({
-      _id: user._id,
+      _id: user.id, // Return user.id as _id for compatibility
+      id: user.id,  // Also include the id field
       name: user.name,
       email: user.email,
       username: user.username,
@@ -151,6 +152,9 @@ router.post('/register', async (req, res) => {
 // Update user color profile
 router.patch('/update-color-profile', protect, async (req, res) => {
   try {
+    console.log('Updating color profile for user:', req.user.id);
+    console.log('New color profile:', req.body.colorProfile);
+    
     const { colorProfile } = req.body;
     
     // Validate color profile
@@ -163,15 +167,17 @@ router.patch('/update-color-profile', protect, async (req, res) => {
     const user = await User.findById(req.user.id);
     
     if (!user) {
+      console.log('User not found:', req.user.id);
       return res.status(404).json({ message: 'User not found' });
     }
     
-    user.colorProfile = colorProfile;
-    await user.save();
+    console.log('Found user:', user);
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, { colorProfile });
+    console.log('Updated user:', updatedUser);
     
     res.json({
       message: 'Color profile updated successfully',
-      colorProfile: user.colorProfile
+      colorProfile: colorProfile
     });
   } catch (error) {
     console.error('Error updating color profile:', error);

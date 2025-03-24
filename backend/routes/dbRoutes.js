@@ -3,7 +3,7 @@ const router = express.Router();
 const listDBContents = require('../utils/listDBContents');
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
-const { MongoClient } = require('mongodb');
+const { getDb } = require('../config/dbSqlite');
 
 // Route to get database contents
 router.get('/contents', async (req, res) => {
@@ -46,44 +46,33 @@ router.post('/create-test-user', async (req, res) => {
       });
     }
 
-    // Generate hash directly
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    console.log('Password hashing completed');
-
-    // Directly update the database to avoid double-hashing
-    const client = new MongoClient(process.env.MONGO_URI);
-    await client.connect();
-    
-    const database = client.db();
-    const users = database.collection('users');
-    
-    // Create new user document with colorProfile
-    const result = await users.insertOne({
-      username,
-      email,
-      password: hashedPassword,
-      name,
-      colorProfile: 'blue', // Set default color profile
-      createdAt: new Date(),
-      updatedAt: new Date()
-    });
-    
-    await client.close();
-    
-    console.log(`User created successfully: ${username} (${email})`);
-
-    res.status(201).json({
-      message: 'User created successfully',
-      user: {
-        _id: result.insertedId,
-        name,
+    // Create user using our User model
+    try {
+      const user = await User.create({
+        username,
         email,
-        username
-      }
-    });
+        password,
+        name,
+        colorProfile: 'blue'
+      });
+      
+      console.log(`User created successfully: ${username} (${email})`);
+      
+      res.status(201).json({
+        message: 'User created successfully',
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          username: user.username
+        }
+      });
+    } catch (error) {
+      console.error('Error creating user:', error);
+      res.status(500).json({ message: error.message });
+    }
   } catch (error) {
-    console.error('Error creating user:', error);
+    console.error('Error in create-test-user route:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -91,7 +80,8 @@ router.post('/create-test-user', async (req, res) => {
 // Get list of users
 router.get('/users', async (req, res) => {
   try {
-    const users = await User.find({}, 'username email name');
+    const db = getDb();
+    const users = await db.all('SELECT id, username, email, name FROM users');
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -129,28 +119,21 @@ router.delete('/delete-all-users', async (req, res) => {
     
     console.log('⚠️ DELETING ALL USERS FROM DATABASE ⚠️');
     
-    // Direct database access for consistent behavior
-    const client = new MongoClient(process.env.MONGO_URI);
-    await client.connect();
-    
-    const database = client.db();
-    const users = database.collection('users');
+    // Get database connection
+    const db = getDb();
     
     // Get count before deletion for reporting
-    const countBefore = await users.countDocuments();
+    const countBefore = await db.get('SELECT COUNT(*) as count FROM users');
     
     // Delete all users
-    const result = await users.deleteMany({});
+    const result = await db.run('DELETE FROM users');
     
-    await client.close();
-    
-    console.log(`🗑️ Deleted ${result.deletedCount} users from database`);
+    console.log(`🗑️ Deleted all users from database`);
     
     res.json({
-      message: `Successfully deleted all users (${result.deletedCount} total)`,
+      message: `Successfully deleted all users`,
       details: {
-        usersCountBefore: countBefore,
-        deletedCount: result.deletedCount
+        usersCountBefore: countBefore.count
       }
     });
   } catch (error) {

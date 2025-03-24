@@ -232,9 +232,14 @@ const Dashboard = () => {
     console.log('Adding new note to state:', newNote);
     
     // Check if the note is valid
-    if (!newNote || !newNote._id) {
+    if (!newNote || (!newNote._id && !newNote.id)) {
       console.error('Invalid note data received:', newNote);
       return;
+    }
+    
+    // Ensure note has a consistent id field
+    if (!newNote._id && newNote.id) {
+      newNote._id = newNote.id;
     }
     
     // Add to notes array
@@ -259,23 +264,36 @@ const Dashboard = () => {
     }
   }, [searchQuery]);
   
+  // Function to get a note ID (supporting both MongoDB _id and SQLite id)
+  const getNoteId = (note) => note._id || note.id;
+
   const handleUpdateNote = useCallback((updatedNote) => {
+    console.log('Updating note in state:', updatedNote);
+    
+    // Ensure note has a consistent id field
+    if (!updatedNote._id && updatedNote.id) {
+      updatedNote._id = updatedNote.id;
+    }
+    
+    // Update in notes array
     setNotes(prevNotes => 
       prevNotes.map(note => 
-        note._id === updatedNote._id ? updatedNote : note
+        getNoteId(note) === getNoteId(updatedNote) ? updatedNote : note
       )
     );
     
+    // Update in filtered notes if there's a search
     setFilteredNotes(prevNotes => 
       prevNotes.map(note => 
-        note._id === updatedNote._id ? updatedNote : note
+        getNoteId(note) === getNoteId(updatedNote) ? updatedNote : note
       )
     );
   }, []);
-  
+
   const handleDeleteNote = useCallback((noteId) => {
-    setNotes(prevNotes => prevNotes.filter(note => note._id !== noteId));
-    setFilteredNotes(prevNotes => prevNotes.filter(note => note._id !== noteId));
+    console.log('Deleting note from state:', noteId);
+    setNotes(prevNotes => prevNotes.filter(note => getNoteId(note) !== noteId));
+    setFilteredNotes(prevNotes => prevNotes.filter(note => getNoteId(note) !== noteId));
   }, []);
   
   const handleSearch = useCallback((e) => {
@@ -529,7 +547,7 @@ const Dashboard = () => {
               ) : (
                 filteredNotes.map(note => (
                   <Note 
-                    key={note._id} 
+                    key={getNoteId(note)} 
                     note={note} 
                     theme={theme} 
                     viewMode={viewMode}

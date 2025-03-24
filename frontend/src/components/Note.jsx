@@ -5,6 +5,9 @@ import SearchHighlight from './SearchHighlight';
 const Note = ({ note, theme, viewMode, onNoteUpdated, onNoteDeleted, searchQuery = '', onEdit }) => {
   const [loading, setLoading] = useState(false);
   
+  // Get the note ID (support both MongoDB _id and SQLite id)
+  const getNoteId = () => note._id || note.id;
+  
   // Handle note deletion
   const deleteNote = async () => {
     if (!window.confirm('Are you sure you want to delete this note?')) {
@@ -14,11 +17,12 @@ const Note = ({ note, theme, viewMode, onNoteUpdated, onNoteDeleted, searchQuery
     setLoading(true);
     
     try {
-      await axios.delete(`/api/notes/${note._id}`);
+      const noteId = getNoteId();
+      await axios.delete(`/api/notes/${noteId}`);
       
       // Call the parent callback
       if (onNoteDeleted) {
-        onNoteDeleted(note._id);
+        onNoteDeleted(noteId);
       }
     } catch (error) {
       console.error('Error deleting note:', error);

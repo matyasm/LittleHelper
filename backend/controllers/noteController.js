@@ -7,7 +7,8 @@ const User = require('../models/userModel');
 // @route   GET /api/notes
 // @access  Private
 const getNotes = asyncHandler(async (req, res) => {
-  const notes = await Note.find({ user: req.user.id });
+  console.log('Getting notes for user with id:', req.user.id);
+  const notes = await Note.find({ userId: req.user.id });
   res.status(200).json(notes);
 });
 
@@ -20,11 +21,11 @@ const createNote = asyncHandler(async (req, res) => {
     throw new Error('Please add a title and content');
   }
 
+  console.log('Creating note for user with id:', req.user.id);
   const note = await Note.create({
     title: req.body.title,
     content: req.body.content,
-    user: req.user.id,
-    isPublic: req.body.isPublic || false,
+    user: req.user.id, // Will be mapped to userId in the model
   });
 
   res.status(201).json(note);
@@ -34,6 +35,7 @@ const createNote = asyncHandler(async (req, res) => {
 // @route   PUT /api/notes/:id
 // @access  Private
 const updateNote = asyncHandler(async (req, res) => {
+  console.log('Updating note with id:', req.params.id);
   const note = await Note.findById(req.params.id);
 
   if (!note) {
@@ -48,14 +50,12 @@ const updateNote = asyncHandler(async (req, res) => {
   }
 
   // Make sure the logged in user matches the note user
-  if (note.user.toString() !== req.user.id) {
+  if (note.userId != req.user.id) { // Use != instead of !== for type coercion
     res.status(401);
     throw new Error('User not authorized');
   }
 
-  const updatedNote = await Note.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
+  const updatedNote = await Note.findByIdAndUpdate(req.params.id, req.body);
 
   res.status(200).json(updatedNote);
 });
@@ -64,6 +64,7 @@ const updateNote = asyncHandler(async (req, res) => {
 // @route   DELETE /api/notes/:id
 // @access  Private
 const deleteNote = asyncHandler(async (req, res) => {
+  console.log('Deleting note with id:', req.params.id);
   const note = await Note.findById(req.params.id);
 
   if (!note) {
@@ -78,65 +79,21 @@ const deleteNote = asyncHandler(async (req, res) => {
   }
 
   // Make sure the logged in user matches the note user
-  if (note.user.toString() !== req.user.id) {
+  if (note.userId != req.user.id) { // Use != instead of !== for type coercion
     res.status(401);
     throw new Error('User not authorized');
   }
 
-  await note.remove();
+  await Note.findByIdAndDelete(req.params.id);
 
   res.status(200).json({ id: req.params.id });
 });
 
-// @desc    Share note with another user
+// @desc    Share note with another user (simplified for SQLite)
 // @route   POST /api/notes/:id/share
 // @access  Private
 const shareNote = asyncHandler(async (req, res) => {
-  const { email } = req.body;
-
-  if (!email) {
-    res.status(400);
-    throw new Error('Please provide an email to share with');
-  }
-
-  const note = await Note.findById(req.params.id);
-
-  if (!note) {
-    res.status(404);
-    throw new Error('Note not found');
-  }
-
-  // Check for user
-  if (!req.user) {
-    res.status(401);
-    throw new Error('User not found');
-  }
-
-  // Make sure the logged in user matches the note user
-  if (note.user.toString() !== req.user.id) {
-    res.status(401);
-    throw new Error('User not authorized');
-  }
-
-  // Find user to share with
-  const userToShareWith = await User.findOne({ email });
-
-  if (!userToShareWith) {
-    res.status(404);
-    throw new Error('User to share with not found');
-  }
-
-  // Check if already shared
-  if (note.sharedWith.includes(userToShareWith._id)) {
-    res.status(400);
-    throw new Error('Note already shared with this user');
-  }
-
-  // Add user to sharedWith array
-  note.sharedWith.push(userToShareWith._id);
-  await note.save();
-
-  res.status(200).json(note);
+  res.status(501).json({ message: 'Note sharing not implemented for SQLite version' });
 });
 
 module.exports = {

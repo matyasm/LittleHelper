@@ -3,17 +3,24 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const { errorHandler } = require('./middleware/errorMiddleware');
-const connectDB = require('./config/db');
+const { connectDB } = require('./config/dbSqlite');
+const initializeDb = require('./utils/initializeDb');
 
 // Load environment variables as early as possible
 dotenv.config();
 
-// Connect to database
-connectDB();
-
 // Initialize express app
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Connect to database and initialize schema
+(async () => {
+  await connectDB();
+  await initializeDb();
+})().catch(err => {
+  console.error('Failed to initialize database:', err);
+  process.exit(1);
+});
 
 // Middleware
 app.use((req, res, next) => {
